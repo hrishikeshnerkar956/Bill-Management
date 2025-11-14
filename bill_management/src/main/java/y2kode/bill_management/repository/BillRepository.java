@@ -16,10 +16,8 @@ public class BillRepository {
 	private JdbcTemplate jdbcTemplate;
 	
 	public List<Bill> getAllBills() {
-		String sql = "select*from bill";
+		String sql = "SELECT id, biller, description, amount, bill_date as billDate, payment_date as paymentDate, paymentmode as paymentMode, paymentstatus as paymentStatus FROM bill";
 		return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Bill.class));
-		
-		
 	}
 	
 	public void addNewBill(Bill bill) {
@@ -41,8 +39,9 @@ public class BillRepository {
 				bill.getBiller(),
 				bill.getDescription(),
 				bill.getAmount(),
-				bill.getPaymentMode(),
-				bill.getPaymentStatus()
+				bill.getPaymentMode().name(),
+				bill.getPaymentStatus().name(),
+				bill.getId()
 		);
 	}
 	
@@ -52,7 +51,7 @@ public class BillRepository {
 	}
 	
 	public Bill getBillById(Integer id) {
-		String sql= "select * from bill where id=?";
-		return jdbcTemplate.queryForObject(sql,  new BeanPropertyRowMapper<>(Bill.class), id);
+		String sql = "SELECT id, biller, description, amount, bill_date as billDate, payment_date as paymentDate, paymentmode as paymentMode, paymentstatus as paymentStatus FROM bill WHERE id=?";
+		return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Bill.class), id);
 	}
 }
